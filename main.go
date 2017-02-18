@@ -3,9 +3,10 @@ package main
 
 import (
 	"fmt"
-	"monkey/repl"
 	"os"
 	"os/user"
+
+	"github.com/cloutiy/monkey/repl"
 )
 
 func main() {

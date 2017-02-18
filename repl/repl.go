@@ -5,8 +5,9 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"monkey/lexer"
-	"monkey/token"
+
+	"github.com/cloutiy/monkey/lexer"
+	"github.com/cloutiy/monkey/token"
 )
 
 const PROMPT = ">>"
@@ -35,7 +36,7 @@ func Start(in io.Reader, out io.Writer) {
 		l := lexer.New(line)
 
 		//Print the results of lexing until we get to EOF
-		for tok := l.NextToken(); tok.Type != token.EOF; tok := l.NextToken() {
+		for tok := l.NextToken(); tok.Type != token.EOF; tok = l.NextToken() {
 			fmt.Printf("%+v\n", tok)
 		}
 	}

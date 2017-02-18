@@ -44,7 +44,7 @@ func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
 	//Skip whitespace
-	l.skipWisespace()
+	l.skipWitespace()
 
 	switch l.ch {
 	case '=':
@@ -105,8 +105,8 @@ func (l *Lexer) NextToken() token.Token {
 
 			//Or a number
 		} else if isDigit(l.ch) {
-			tok.Literal = l.readNumber()
 			tok.Type = token.INT
+			tok.Literal = l.readNumber()
 			return tok
 
 			//And if neither of these, something our language doesn't allow
@@ -153,7 +153,7 @@ Note to self: This function skips over newlines. To include position
 and line number in errors, it would be necessary to handle newline
 differently (if newline => currentline++ and resetCursorPosition()
 */
-func (l *Lexer) skipWisespace() {
+func (l *Lexer) skipWitespace() {
 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
 		l.readChar()
 	}
@@ -163,7 +163,7 @@ func (l *Lexer) skipWisespace() {
 Reads a number
 */
 func (l *Lexer) readNumber() string {
-	position := l.readPosition
+	position := l.position
 
 	//Keep advancing the cursor position while the char is a digit
 	for isDigit(l.ch) {
@@ -171,7 +171,7 @@ func (l *Lexer) readNumber() string {
 	}
 
 	//Return the string representing the number
-	return l.input[position:l.readPosition]
+	return l.input[position:l.position]
 }
 
 /*
