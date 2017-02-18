@@ -48,20 +48,24 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case '=':
+		//Look at next char. if == => token is equality
 		if l.peekChar() == '=' {
 			ch := l.ch
 			l.readChar()
 			tok = token.Token{Type: token.EQ, Literal: string(ch) + string(l.ch)}
+			//Otherwise,weare looking at assignment
 		} else {
 			tok = newToken(token.ASSIGN, l.ch)
 		}
 	case '-':
 		tok = newToken(token.MINUS, l.ch)
 	case '!':
+		//If next token is =, we are looking at noteq
 		if l.peekChar() == '=' {
 			ch := l.ch
 			l.readChar()
 			tok = token.Token{Type: token.NOT_EQ, Literal: string(ch) + string(l.ch)}
+			//Otherwise it is an assignment
 		} else {
 			tok = newToken(token.BANG, l.ch)
 		}
@@ -87,18 +91,25 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LBRACE, l.ch)
 	case '}':
 		tok = newToken(token.RBRACE, l.ch)
+	//If 0 (NULL) return EOF
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
+
+	//If it's neither of the above, it's possibly a keyword | identifier
 	default:
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
+
+			//Or a number
 		} else if isDigit(l.ch) {
 			tok.Literal = l.readNumber()
 			tok.Type = token.INT
 			return tok
+
+			//And if neither of these, something our language doesn't allow
 		} else {
 			tok = newToken(token.ILLEGAL, l.ch)
 		}
